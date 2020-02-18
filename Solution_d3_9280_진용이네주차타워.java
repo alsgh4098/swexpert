@@ -1,4 +1,4 @@
-
+package com.ssafy.com;
 
 import java.util.ArrayList;
 import java.util.Scanner;
