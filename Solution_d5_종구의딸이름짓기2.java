@@ -9,7 +9,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Solution_7396 {
+public class Solution_d5_종구의딸이름짓기2 {
 
 	static int N;
 	static int M;
