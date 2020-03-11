@@ -130,7 +130,8 @@ public class Solution_d5_벽돌깨기 {
 		}
 		System.out.println(sb);
 	}
-
+	
+	//중복 순열
 	private static void dropMarble(int r, int brickCnt, int[][] map) {
 		if(r==0) {
 			// 솔루션 사용.
