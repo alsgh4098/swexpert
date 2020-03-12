@@ -15,7 +15,7 @@ import java.util.TreeSet;
 // 중복을 제거
 
 
-public class Solution_d4_염라대왕의이름정렬_교수님_병합정렬_SET_입출력처리 {
+public class Solution_d4_염라대왕의이름정렬_교수님_병합정렬_SET2 {
 	
 	static int N;
 

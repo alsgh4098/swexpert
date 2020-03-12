@@ -1,9 +1,6 @@
 package swexpert2;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -20,12 +17,12 @@ public class Solution_d4_염라대왕의이름정렬_교수님_병합정렬_SET 
 	static int N;
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Scanner sc = new Scanner(System.in);
 		
-		int TC = Integer.parseInt(br.readLine()); // 1~50
+		int TC = sc.nextInt(); // 1~50
 		
 		for (int t = 1; t <= TC; t++) {
-			int N = Integer.parseInt(br.readLine()); // 이름의 개수 1~20,000
+			int N = sc.nextInt(); // 이름의 개수 1~20,000
 			
 			Set<String> set = new TreeSet<String>(new Comparator<String>() {
 				@Override
@@ -39,21 +36,17 @@ public class Solution_d4_염라대왕의이름정렬_교수님_병합정렬_SET 
 			});
 			
 			for (int i = 0; i < N; i++) {
-				set.add(br.readLine());
+				set.add(sc.next());
 			}
 			
-			StringBuilder sb = new StringBuilder();
-			
 			// 중복제거
-			sb.append("#"+t+"\n");
+			System.out.println("#"+t);
 			
 			Iterator<String> iter = set.iterator();
 			
 			while(iter.hasNext()) {
-				sb.append(iter.next()+"\n");
+				System.out.println(iter.next());
 			}
-			
-			System.out.println(sb);
 		} // end of testCase
 		
 		
