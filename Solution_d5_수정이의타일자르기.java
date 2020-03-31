@@ -1,15 +1,20 @@
-package swexpert2;
+package swexpert_복습;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Solution_d5_수정이의타일자르기 {
 	
-	static int N;
-	static int M;
+	static int N,M;
+	
+	static int[] tiles;
+	static PriorityQueue<Rectangle> list;
+	
+	static int cnt;
 	
 	static class Rectangle implements Comparable<Rectangle>{
 		int max;
@@ -17,69 +22,63 @@ public class Solution_d5_수정이의타일자르기 {
 		
 		public Rectangle(int w, int h) {
 			super();
-			if(w<h) {
-				max = h;
-				min = w;
-			}else {				
-				max = w;
-				min = h;
-			}
+			this.max = Math.max(w, h);
+			this.min = Math.min(w, h);
 		}
 
 		@Override
 		public int compareTo(Rectangle o) {
 			return o.min - this.min;
 		}
+		
 	}
 	
-	static PriorityQueue<Rectangle> left;
-	
-	static int[] tiles;
-	static int res;
-
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		int TC = sc.nextInt();
+		int tc = Integer.parseInt(br.readLine());
 		
-		for (int t = 1; t <= TC; t++) {
-			N = sc.nextInt();
-			M = sc.nextInt();
-			tiles = new int[N];
-			left = new PriorityQueue<Rectangle>();
+		for (int t = 1; t <= tc; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+			
+			tiles = new int[N];
+			list = new PriorityQueue<Rectangle>();
+			cnt = 1;
+			list.add(new Rectangle(M,M));
+			
+			st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < N; i++) {
-				int n = sc.nextInt();
-				tiles[i] = 1<<n;
+				tiles[i] = 1<<Integer.parseInt(st.nextToken()); 
 			}
 			
 			Arrays.sort(tiles);
 			
-			left.add(new Rectangle(M,M));
-			
-			res = 1;
-			
 			for (int i = N-1; i >= 0; i--) {
-				go(tiles[i]);
+				cutRectangle(i);
 			}
 			
-			System.out.println("#"+t+" "+res);
+			
+			System.out.println("#"+t+" "+cnt);
 		}
 
-	}//end main
-	
-	static void go(int size) {
-		Rectangle lft = left.poll();
+	}
+
+	private static void cutRectangle(int i) {
+		Rectangle rtgl = list.poll();
 		
-		if(size <= lft.min) {
-			left.offer(new Rectangle(lft.min-size, size));
-			left.offer(new Rectangle(lft.min, lft.max - size));
+		if(rtgl.min >= tiles[i]) {
+			list.offer(new Rectangle(rtgl.min-tiles[i],tiles[i]));
+			list.offer(new Rectangle(rtgl.min,rtgl.max-tiles[i]));
 		}else {
-			left.offer(lft);
-			left.offer(new Rectangle(M-size,size));
-			left.offer(new Rectangle(M,M-size) );
-			res++;
+			list.offer(rtgl);
+			list.offer(new Rectangle(M-tiles[i],tiles[i]));
+			list.offer(new Rectangle(M,M-tiles[i]));
+			cnt++;
 		}
+		
 	}
 
 }

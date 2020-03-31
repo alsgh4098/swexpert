@@ -1,4 +1,4 @@
-package swexpert2;
+package swexpert_복습;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,128 +9,115 @@ import java.util.StringTokenizer;
 
 public class Solution_d5_오나의여신님 {
 	
-	static int N;
-	static int M;
+	static int N,M;
+	
 	static char[][] map;
 	
-	static int res;
-	static Queue<Sy> suyeon;
-	static Queue<Dv> devil;
+	static Queue<Point> suyeon;
+	static Queue<Point> devil;
+	
+	static int cnt;
 	
 	static int[] dx = {-1,0,1,0};
 	static int[] dy = {0,1,0,-1};
- 	
-	static class Sy{
+	
+	static public class Point{
 		int x;
 		int y;
 		int cnt;
-		
-		public Sy(int x, int y, int cnt) {
+		public Point(int x, int y) {
+			super();
+			this.x = x;
+			this.y = y;
+		}
+		public Point(int x, int y,int cnt) {
 			super();
 			this.x = x;
 			this.y = y;
 			this.cnt = cnt;
 		}
 	}
-	
-	static class Dv{
-		int x;
-		int y;
-		
-		public Dv(int x, int y) {
-			super();
-			this.x = x;
-			this.y = y;
-		}
-	}
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
+		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
+		StringBuilder sb = new StringBuilder();
 		int TC = Integer.parseInt(br.readLine());
 		
 		for (int t = 1; t <= TC; t++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
-			M= Integer.parseInt(st.nextToken());
-			
+			M = Integer.parseInt(st.nextToken());
+			suyeon = new LinkedList<Point>();
+			devil = new LinkedList<Point>();
+
 			map = new char[N][M];
 			
-			suyeon = new LinkedList<Sy>();
-			devil = new LinkedList<Dv>();
-			
 			for (int i = 0; i < N; i++) {
-				String str = br.readLine();
+				String line = br.readLine();
 				for (int j = 0; j < M; j++) {
-					map[i][j] = str.charAt(j);
-					
+					map[i][j] = line.charAt(j);
+					if(map[i][j] == 'S') {
+						suyeon.offer(new Point(i,j,0));
+					}
 					if(map[i][j] == '*') {
-						devil.add(new Dv(i,j));
-					}else if(map[i][j] == 'S') {
-						suyeon.add(new Sy(i,j,0));
+						devil.offer(new Point(i,j));
 					}
 				}
-			}
+			}// end input
 			
-			if(bfs() == -1) {
-				System.out.println("#"+t+" "+"GAME OVER");
-			}else{
-				System.out.println("#"+t+" "+res);
-			}
-		}
+			int res = GameStart();
+			sb.append("#"+t+" "+(res==-1?"GAME OVER":res)+"\n");
+		}// end testcase
+		System.out.println(sb);
+	}// end main
 
-	}
-
-	private static int bfs() {
+	private static int GameStart() {
 		while(!suyeon.isEmpty()) {
-			
 			int len = devil.size();
 			
 			for (int i = 0; i < len; i++) {
-				Dv nd = devil.poll();
+				Point dvl = devil.poll();
 				
 				for (int j = 0; j < 4; j++) {
-					int nx = nd.x + dx[j];
-					int ny = nd.y + dy[j];
-					if(inner(nx,ny)) {
-						if(map[nx][ny] == '.' ||
-						   map[nx][ny] == 'S') {
+					int nx = dvl.x + dx[j];
+					int ny = dvl.y + dy[j];
+					
+					if(0<= nx && nx < N && 0<= ny && ny < M) {
+						if(map[nx][ny] == 'S' || map[nx][ny] == '.') {
 							map[nx][ny] = '*';
-							devil.offer(new Dv(nx,ny));
+							devil.offer(new Point(nx,ny));
 						}
 					}
 				}
-			}
+			}// end devil move
 			
 			len = suyeon.size();
 			
 			for (int i = 0; i < len; i++) {
-				Sy ns = suyeon.poll();
+				Point syn = suyeon.poll();
+				int cnt = syn.cnt;
 				
 				for (int j = 0; j < 4; j++) {
-					int nx = ns.x + dx[j];
-					int ny = ns.y + dy[j];
-					if(inner(nx,ny)) {
+					int nx = syn.x + dx[j];
+					int ny = syn.y + dy[j];
+					
+					if(0<= nx && nx < N && 0<= ny && ny < M) {
 						if(map[nx][ny] == '.') {
 							map[nx][ny] = 'S';
-							suyeon.offer(new Sy(nx,ny,ns.cnt+1));
+							suyeon.offer(new Point(nx,ny,cnt+1));
 						}
 						
 						if(map[nx][ny] == 'D') {
-							res =  ns.cnt+1;
-							return 0;
+							return (cnt+1);
 						}
 					}
 				}
-			}
+			}// end seyeon move
+			
 		}
 		
 		return -1;
-		
-	}
-	
-	static boolean inner(int x, int y) {
-		return 0<=x && x < N && 0<= y && y < M;
 	}
 
 }
